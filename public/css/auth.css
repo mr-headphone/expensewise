@@ -1,0 +1,103 @@
+/* ============================================
+   AUTH PAGE STYLES (Login & Register)
+   ============================================ */
+
+/* Full page purple gradient background */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #6C63FF 0%, #574fd6 100%);
+}
+
+/* ── BRAND (Logo area) ─────────────────────────────────── */
+.auth-brand {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.brand-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.brand-name {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.brand-tagline {
+  font-size: 1rem;
+  opacity: 0.85;
+  margin-top: 0.3rem;
+}
+
+/* ── WHITE CARD ────────────────────────────────────────── */
+.auth-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* ── TABS (Login / Register switch) ───────────────────── */
+.auth-tabs {
+  display: flex;
+  background: #f4f5f7;
+  border-radius: var(--radius);
+  padding: 4px;
+  margin-bottom: 1.5rem;
+  gap: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+/* Active tab looks selected */
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(108, 99, 255, 0.4);
+}
+
+/* ── FORMS ─────────────────────────────────────────────── */
+/* Hide both forms by default */
+.auth-form {
+  display: none;
+}
+
+/* Show only the active form */
+.auth-form.active {
+  display: block;
+}
+
+/* ── RESPONSIVE (phones) ───────────────────────────────── */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.5rem 1.2rem;
+    border-radius: 16px;
+  }
+
+  .brand-name {
+    font-size: 1.6rem;
+  }
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExpenseWise – Dashboard</title>
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/normalize.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+  <!-- ── TOP NAVIGATION BAR ──────────────────────────── -->
+  <header class="navbar">
+    <div class="navbar__brand">
+      <span>💰</span>
+      <span>ExpenseWise</span>
+    </div>
+    <div class="navbar__user">
+      <span id="navUserName">Loading...</span>
+      <button class="btn btn--outline btn--sm" id="logoutBtn">
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN CONTENT ─────────────────────────────────── -->
+  <main class="dashboard">
+
+    <!-- Summary Cards Row -->
+    <section class="summary-cards">
+      <div class="card summary-card">
+        <p class="card__label">Total Spent</p>
+        <p class="card__value" id="totalSpent">$0.00</p>
+      </div>
+      <div class="card summary-card">
+        <p class="card__label">This Month</p>
+        <p class="card__value" id="monthSpent">$0.00</p>
+      </div>
+      <div class="card summary-card">
+        <p class="card__label">Total Expenses</p>
+        <p class="card__value" id="expenseCount">0</p>
+      </div>
+    </section>
+
+    <!-- Two Column Grid -->
+    <div class="dashboard__grid">
+
+      <!-- ── LEFT: Form + Filters + List ────────────── -->
+      <section class="expenses-section">
+
+        <!-- ADD / EDIT EXPENSE FORM -->
+        <div class="card">
+          <h2 class="card__title" id="formTitle">➕ Add Expense</h2>
+          <form id="expenseForm" novalidate>
+
+            <!-- Hidden field to track which expense we're editing -->
+            <input type="hidden" id="editId" />
+
+            <!-- Title and Amount side by side -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="expTitle">Title</label>
+                <input
+                  type="text"
+                  id="expTitle"
+                  placeholder="e.g. Groceries"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="expAmount">Amount (D)</label>
+                <input
+                  type="number"
+                  id="expAmount"
+                  placeholder="0.00"
+                  min="0.01"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Category and Date side by side -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="expCategory">Category</label>
+                <select id="expCategory" required>
+                  <option value="">-- Select --</option>
+                  <option value="Food">🍔 Food</option>
+                  <option value="Transport">🚗 Transport</option>
+                  <option value="Housing">🏠 Housing</option>
+                  <option value="Entertainment">🎬 Entertainment</option>
+                  <option value="Health">💊 Health</option>
+                  <option value="Shopping">🛍️ Shopping</option>
+                  <option value="Education">📚 Education</option>
+                  <option value="Other">📦 Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="expDate">Date</label>
+                <input type="date" id="expDate" required />
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="form-group">
+              <label for="expNotes">Notes (optional)</label>
+              <textarea
+                id="expNotes"
+                rows="2"
+                placeholder="Any extra details..."
+              ></textarea>
+            </div>
+
+            <!-- Submit and Cancel buttons -->
+            <div class="form-actions">
+              <button type="submit" class="btn btn--primary" id="submitExpenseBtn">
+                Add Expense
+              </button>
+              <button type="button" class="btn btn--ghost hidden" id="cancelEditBtn">
+                Cancel
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="card filters">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 Search by title..."
+          />
+          <select id="filterCategory">
+            <option value="">All Categories</option>
+            <option value="Food">🍔 Food</option>
+            <option value="Transport">🚗 Transport</option>
+            <option value="Housing">🏠 Housing</option>
+            <option value="Entertainment">🎬 Entertainment</option>
+            <option value="Health">💊 Health</option>
+            <option value="Shopping">🛍️ Shopping</option>
+            <option value="Education">📚 Education</option>
+            <option value="Other">📦 Other</option>
+          </select>
+          <input type="date" id="filterStart" title="From this date" placeholder="From" />
+          <input type="date" id="filterEnd" title="To this date" placeholder="To" />
+          <button class="btn btn--outline btn--sm" id="clearFiltersBtn">
+            Clear
+          </button>
+        </div>
+
+        <!-- EXPENSE LIST (filled by JavaScript) -->
+        <div id="expenseList">
+          <p class="empty-state">Loading expenses...</p>
+        </div>
+
+      </section>
+
+      <!-- ── RIGHT: Chart ────────────────────────────── -->
+      <aside class="chart-section">
+        <div class="card">
+          <h2 class="card__title">📊 Spending by Category</h2>
+          <canvas id="categoryChart"></canvas>
+          <div id="chartLegend" class="chart-legend"></div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ── DELETE CONFIRMATION MODAL ─────────────────────── -->
+  <!-- Hidden by default, shown when delete is clicked -->
+  <div class="modal-overlay hidden" id="deleteModal">
+    <div class="modal">
+      <h3>🗑️ Delete Expense?</h3>
+      <p>This cannot be undone.</p>
+      <div class="modal__actions">
+        <button class="btn btn--danger" id="confirmDeleteBtn">
+          Yes, Delete
+        </button>
+        <button class="btn btn--ghost" id="cancelDeleteBtn">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load the dashboard JavaScript -->
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
