@@ -4,7 +4,7 @@
 
 // ⚠️ IMPORTANT: Change this URL after you deploy!
 // For now, use localhost for local development
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://expensewise-1-9gg9.onrender.com/api';
 
 /**
  * This is our main fetch function.
